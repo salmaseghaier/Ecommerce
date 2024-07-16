@@ -1,3 +1,38 @@
+
+<?php
+session_start();
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
+
+include "../../classes/Panier.php";
+
+$panier = new Panier();
+
+$product_id = isset($_GET['product_id']) ? intval($_GET['product_id']) : 0;
+$user_id = $_SESSION['user_id'];
+
+echo "Product ID: $product_id<br>";
+echo "User ID: $user_id<br>";
+
+if ($product_id > 0) {
+    if ($panier->store($user_id, $product_id)) {
+        echo 'Produit ajouté au panier avec succès !';
+    } else {
+        echo 'Erreur lors de l\'ajout du produit au panier.';
+    }
+} else {
+    echo 'ID du produit invalide.';
+}
+?>
+
+
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="en-US"><head>
 
@@ -19,14 +54,20 @@
  
 <div>
 
-
     <ul id="navbar">
-        <li><a  href="index.php">Home</a></li>
-        <li><a  href="shop.php">shop</a></li>
+        <li><a class="active" href="index.html">Home</a></li>
+        <li><a href="shop.php">shop</a></li>
         <li><a href="blog.php">Blog</a></li>
+<<<<<<< HEAD
         <li><a   href="about.php">About</a></li>
-        <li><a  href="contact.php"></i>Contact</a></li>
+        <li><a  href="Reclamation.php"></i>Reclamation</a></li>
         <li id="lg-bag"><a  class="active" href="cart.html"><i class="fa-solid fa-bag-shopping"></i></a></li>
+=======
+        <li><a href="about.php">About</a></li>
+        <li><a href="login.php">S'inscrire</a></li>
+        <li><a href="contact.php"></i>Contact</a></li>
+        <li id="lg-bag"><a href="cart.php"><i class="fa-solid fa-bag-shopping"></i></a></li>
+>>>>>>> 6fa0fae2ce45c6114c050a05164bd0a1a7711447
         <a href="#" id="close"><i class="fa-solid fa-circle-xmark"></i></a>
     </ul>
 </div>

@@ -1,4 +1,9 @@
 <?php
+session_start();
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
 include"../../classes/Produit.php";
 include("../../Classes/Categorie.php");
 $p=new Produit();
@@ -44,7 +49,7 @@ if(isset($_GET['idP'])){
         <li><a href="blog.php">Blog</a></li>
         <li><a href="about.php">About</a></li>
         <li><a href="login.php">S'inscrire</a></li>
-        <li><a href="contact.php"></i>Contact</a></li>
+        <li><a href="Reclamation.php"></i>Reclamation</a></li>
         <li id="lg-bag"><a href="cart.php"><i class="fa-solid fa-bag-shopping"></i></a></li>
         <a href="#" id="close"><i class="fa-solid fa-circle-xmark"></i></a>
     </ul>
@@ -112,143 +117,7 @@ if(isset($_GET['idP'])){
     <p> Summer Collection New Morden Design</p>
     <div class="pro-container">
 
-       <!-- <div class="pro">
-            <img src="img/products/f1.jpg" alt="">
-            <div class="des">
-                <span>adidas</span>
-                <h5>Cartoon Astronaut T-Shirts</h5>
 
-                <div class="star">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                </div>
-                <h4>$78</h4>
-
-            </div>0
-            <a href="#"><i class="fa-solid fa-cart-shopping cart"></i></a>
-        </div>-->
-        
-
-      <!--  <div class="pro">
-            <img src="img/products/f2.jpg" alt="">
-            <div class="des">
-                <span>adidas</span>
-                <h5>Cartoon Astronaut T-Shirts</h5>
-
-                <div class="star">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                </div>
-                <h4>$78</h4>
-
-            </div>
-            <a href="#"><i class="fa-solid fa-cart-shopping cart"></i></a>
-        </div>-->
- 
-       <!-- <div class="pro">
-            <img src="img/products/f3.jpg" alt="">
-            <div class="des">
-                <span>adidas</span>
-                <h5>Cartoon Astronaut T-Shirts</h5>
-
-                <div class="star">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                </div>
-                <h4>$78</h4>
-
-            </div>
-            <a href="#"><i class="fa-solid fa-cart-shopping cart"></i></a>
-        </div>
--->
-
-      <!--  <div class="pro">
-            <img src="img/products/f4.jpg" alt="">
-            <div class="des">
-                <span>adidas</span>
-                <h5>Cartoon Astronaut T-Shirts</h5>
-
-                <div class="star">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                </div>
-                <h4>$78</h4>
-
-            </div>
-            <a href="#"><i class="fa-solid fa-cart-shopping cart"></i></a>
-        </div>
--->
-
-    <!--    <div class="pro">
-            <img src="img/products/f5.jpg" alt="">
-            <div class="des">
-                <span>adidas</span>
-                <h5>Cartoon Astronaut T-Shirts</h5>
-
-                <div class="star">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                </div>
-                <h4>$78</h4>
-
-            </div>
-            <a href="#"><i class="fa-solid fa-cart-shopping cart"></i></a>
-        </div>-->
-
-
-      <!--  <div class="pro">
-            <img src="img/products/f6.jpg" alt="">
-            <div class="des">
-                <span>adidas</span>
-                <h5>Cartoon Astronaut T-Shirts</h5>
-
-                <div class="star">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                </div>
-                <h4>$78</h4>
-
-            </div>
-            <a href="#"><i class="fa-solid fa-cart-shopping cart"></i></a>
-        </div>
--->
-
-      <!--  <div class="pro">
-            <img src="img/products/f7.jpg" alt="">
-            <div class="des">
-                <span>adidas</span>
-                <h5>Cartoon Astronaut T-Shirts</h5>
-
-                <div class="star">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                </div>
-                <h4>$78</h4>
-
-            </div>
-            <a href="#"><i class="fa-solid fa-cart-shopping cart"></i></a>
-        </div>-->
 
         <?php
         while($p = $listeP->fetch()) {
@@ -266,9 +135,9 @@ if(isset($_GET['idP'])){
                         <i class="fas fa-star"></i>
                         <i class="fas fa-star"></i>
                     </div>
-                    <h4><?php echo $p['Prix']; ?></h4>
+                    <h4><?php echo htmlspecialchars($p['Prix']); ?></h4>
                 </div>
-                <a href="cart.php"><i class="fa-solid fa-cart-shopping cart"></i></a>
+                <a href="cart.php?product_id=<?php echo urlencode($p['id']); ?>"><i class="fa-solid fa-cart-shopping cart"></i></a>
             </div>
             <?php
         }

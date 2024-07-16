@@ -20,11 +20,16 @@
 <div>
 
     <ul id="navbar">
-        <li><a  href="index.php">Home</a></li>
-        <li><a class="active" href="shop.htm">shop</a></li>
+        <li><a class="active" href="index.html">Home</a></li>
+        <li><a href="shop.php">shop</a></li>
         <li><a href="blog.php">Blog</a></li>
         <li><a href="about.php">About</a></li>
+<<<<<<< HEAD
+        <li><a href="Reclamation.php"></i>Reclamation</a></li>
+=======
+        <li><a href="login.php">S'inscrire</a></li>
         <li><a href="contact.php"></i>Contact</a></li>
+>>>>>>> 6fa0fae2ce45c6114c050a05164bd0a1a7711447
         <li id="lg-bag"><a href="cart.php"><i class="fa-solid fa-bag-shopping"></i></a></li>
         <a href="#" id="close"><i class="fa-solid fa-circle-xmark"></i></a>
     </ul>

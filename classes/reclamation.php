@@ -10,12 +10,13 @@ class Reclamation {
 
     function addReclamation($data)
     {//$_POST,$_GET
-        $desc = $data['desc'];
-        $nom=$_SESSION['idu'];
-        $n_comm = $data['idc'];
-        //$this->db->exec("INSERT INTO reclamation (id_commande, id_user, description) VALUES (?, ?, ?)");
 
-        $this->db->exec("insert into reclamation (id,idu,idc,description) values ('','$nom','$n_comm','$desc')");
+        $idu=$data['idu'];
+        $nom=$_SESSION['Nom'];
+        $email = $data['email'];
+        $desc = $data['Description'];
+
+        $this->db->exec("insert into reclamation (idu,Nom,email,Description) values ($idu','$nom','$email',$desc')");
 
     }
     function deleteReclamation($id)
@@ -33,9 +34,13 @@ class Reclamation {
         return $this->db->query("select * from reclamation");
     }
     function updatereclamation($data){
-        $desc = $data['description'];
-        $id = $data['id'];
-        $this->db->exec("update reclamation set description='$desc' where id='$id'");
+
+        $idu=$data['idu'];
+        $nom=$_SESSION['Nom'];
+        $desc = $data['Description'];
+        $email = $data['email'];
+        //this->db->exec("update reclamation set idu ='$idu',Description='$desc',Nom='nom', where id='$id'");
+
     }
 }
 ?>

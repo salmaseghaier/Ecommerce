@@ -11,7 +11,6 @@ $listecommande=$commande->listecommande();
 
 $listereclamation=$reclamation->listereclamation();
 
-
 if(isset($_POST['add_reclamation'])){
     $reclamation->addReclamation($_POST);
     echo "Nouvelle réclamation ajoutée" ;

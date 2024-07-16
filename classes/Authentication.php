@@ -34,3 +34,6 @@ class Authentication
         return $this->db->query("select * from user where email='$email'");
     }
 }
+
+
+

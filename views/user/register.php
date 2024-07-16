@@ -9,7 +9,7 @@ if(isset($_POST['register'])){
         $msg = true;
     }else {
         $auth->signup($_POST);
-        header("location: index.php");
+        header("location: ../front/index.php");
     }
 }
 ?>

@@ -1,5 +1,4 @@
 <?php
-session_start();
 class Panier
 {
     private $db;
@@ -7,6 +6,12 @@ class Panier
     function __construct()
     {
         $this->db = new PDO('mysql:host=localhost;dbname=projet', 'root', '');
+    }
+    public function store($user_id, $product_id) {
+        $query = $this->db->prepare("INSERT INTO panier (user_id, product_id) VALUES (:user_id, :product_id)");
+        $query->bindParam(':user_id', $user_id);
+        $query->bindParam(':product_id', $product_id);
+        return $query->execute();
     }
 }
 function executeRequete($req)
@@ -20,6 +25,10 @@ if(!$resultat)
 return $resultat;
 }
 //------------------------------------
+
+
+
+
 function internauteEstConnecte()
 {
     if(!isset($_SESSION['membre'])) return false;
@@ -64,6 +73,13 @@ function ajouterProduitDansPanier($titre, $id_produit, $quantite, $prix)
         $prix = $_POST['prix'];
     }
 
+
+
+    //
+
+
+
+
 //------------------------------------
     function montantTotal()
     {
@@ -98,4 +114,9 @@ function ajouterProduitDansPanier($titre, $id_produit, $quantite, $prix)
         unset($_SESSION['panier']);
     }
     session_destroy();
+
 }
+
+
+
+

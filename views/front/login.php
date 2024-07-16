@@ -1,3 +1,37 @@
+
+<?php
+session_start();
+include "../../classes/Authentication.php";
+include "../../classes/user.php";
+$auth = new Authentication();
+$user = new user();
+
+if (isset($_POST['username']) && isset($_POST['password'])) {
+    $username = $_POST['username'];
+    $password = md5($_POST['password']); // Crypter le mot de passe avant la comparaison
+    $res = $auth->signin($username, $password);
+    $user = $res->fetch();
+
+    if ($res->rowCount() > 0) {
+        if ($user['role'] == "ROLE_CLIENT") {
+            $_SESSION['username'] = $user['email'];
+            $_SESSION['password'] = $user['password'];
+            $_SESSION['user_id'] = $user['id'];
+            //Client
+            header("location: ../front/index.php");
+        } else {
+            //Agent
+            $_SESSION['user_id'] = $user['id'];
+            header("location: ../produit/listeproduit.php");
+        }
+    } else {
+        echo "Failure: Invalid password or username";
+    }
+}
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,7 +40,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="style2.css">
-    <title>Ludiflex | Login & Registration</title>
+    <title>Ludiflex | Login</title>
     <style>
         /* POPPINS FONT */
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
@@ -74,6 +108,11 @@
             transition: .3s ease;
         }
 
+
+
+
+
+
         .btn:hover{
             background: #6cb9b4;
         }
@@ -94,8 +133,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 800px;
-            height: 650px;
+            width: 512px;
+            height: 420px;
             overflow: hidden;
             z-index: 2;
         }
@@ -117,7 +156,7 @@
         }
         .top span{
             color: #088178;
-            font-size: large;
+            font-size:large;
             padding: 10px 10px;
             display: flex;
             justify-content: center;
@@ -261,208 +300,70 @@
         </div>
         <div class="nav-menu" id="navMenu">
             <ul>
-                <li><a href="index.html" class="link active">Home</a></li>
+                <li><a href="index.php" class="link active">Home</a></li>
                 <li><a href="shop.html" class="link">Shop</a></li>
                 <li><a href="blog.html" class="link">Blog</a></li>
                 <li><a href="About.html" class="link">About</a></li>
-                <li><a href="contact.html" class="link">Contact</a></li>
+                <li><a href="contact.html" class="link">Reclamation</a></li>
             </ul>
         </div>
         <div class="nav-button">
-            <button class="btn white-btn" id="loginBtn" onclick="login()">Sign In</button>
-            <button class="btn" id="registerBtn" onclick="register()">Sign Up</button>
+            <button class="btn white-btn" id="loginBtn">Sign In</button>
+            <button class="btn" id="registerBtn" onclick="location.href='register.php'">Sign Up</button>
         </div>
         <div class="nav-menu-btn">
             <i class="bx bx-menu" onclick="myMenuFunction()"></i>
         </div>
     </nav>
 
-    <?php
-    include "../../classes/Authentication.php";
-    $auth = new Authentication();
-    $msg = false;
-    if(isset($_POST['register'])){
-        //Verification email existant
-        $res = $auth->verifEmail($_POST['email']);
-        if($res->rowCount() > 0){
-            $msg = true;
-        }else {
-            $auth->signup($_POST);
-            header("location: index.php");
-        }
-    }
+    <div class="form-box">
 
-    session_start();
-    include "../../classes/Authentication.php";
-    include "../../classes/user.php";
-    $auth = new Authentication();
-    $user=new user();
-    if(isset($_POST['username']) && isset($_POST['password'])) {
-        $res = $auth->signin($_POST['username'], $_POST['password']);
-        $user = $res->fetch();
-        if($res->rowCount() > 0){
-            if($user['role'] == "ROLE_CLIENT"){
-                $_SESSION['username'] = $user['email'];
-                $_SESSION['password'] = $user['password'];
-                //Client
-                header("location: index.php");
-            }else{
-                //Agent
-                header("location: index.php");
-            }
-        }else {
-            echo "Failure: Invalid password or username";
-        }
+        <div class="login-container" id="login">
 
-    }
-    ?>
-    <form action="" method="post">
-        <?php
-        if($msg){
-            echo "Username Already exist";
-        }
-        ?>
-        <!----------------------------- Form box ----------------------------------->
-        <div class="form-box" style="display: flex; !important;">
-
-            <!------------------- login form -------------------------->
-            <div class="login-container" id="login" style="display: flex; !important;">
-                <div class="top">
-                    <span>Don't have an account? <a href="#" onclick="register()">Sign Up</a></span>
-                    <header>Sign In </header>
-                </div>
-                <div>
-                    <div class="input-box">
-                        <input type="text" name="nom" class="input-field" placeholder="Enter your name" required>
-                        <i class="bx bx-lock-alt"></i>
-
-                    </div>
-                    <div class="input-box">
-                        <input type="text" name="prénom" class="input-field" placeholder="Enter your lastname" required>
-                        <i class="bx bx-lock-alt"></i>
-
-                    </div>
-                    <div class="input-box">
-                        <input type="email" name="email"  class="input-field" placeholder="Enter your email" required>
-                        <i class="bx bx-lock-alt"></i>
-
-                    </div>
-                </div>
-                <div>
-                    <div class="input-box">
-                        <input type="number" name="phone" class="input-field" placeholder="Enter your phone number" required>
-                        <i class="bx bx-lock-alt"></i>
-
-                    </div>
-
-                    <div class="input-box">
-                        <input type="password" name="password" class="input-field" placeholder="Create password" required>
-                        <i class="bx bx-lock-alt"></i>
-
-                    </div>
-                    <div class="input-box">
-                        <input type="password"  class="input-field" placeholder="Confirm password" required>
-                        <i class="bx bx-lock-alt"></i>
-
-                    </div>
-                    <div class="input-box">
-                        <input type="radio" name="civilité"  >
-
-                        <label>Femme</label>
-                        <input type ="radio"  name="civilité"  >
-                        <label>Homme</label>
-                    </div>
-                </div>
-                <div class="input-box button">
-                    <input type="Submit" name="register" value="Register Now">
-                </div>
-
-                <div class="input-box">
-                    <input type="submit" class="submit" value="Sign In">
-                </div>
-                <div class="two-col">
-                    <div class="one">
-                        <input type="checkbox" id="login-check">
-                        <label for="login-check"> Remember Me</label>
-                    </div>
-
-                </div>
-            </div>
-    </form>
-
-    <form action="" method="post">
-        <div class="register-container" id="register" style="display: flex; !important;">
             <div class="top">
-                <span>Have an account? <a href="#" onclick="login()">Login</a></span>
-                <header>Sign Up</header>
+                <span>Don't have an account? <a href="register.html">Sign Up</a></span>
+                <header>Sign In</header>
             </div>
-            <div class="two-forms">
-                <div class="input-box">
-                    <input type="text" class="input-field" name="username" placeholder="Firstname">
-                    <i class="bx bx-user"></i>
-                </div>
 
-            </div>
+            <form action="" method="post">
 
             <div class="input-box">
-                <input type="password" class="input-field" name="password" placeholder="Password">
+                <input type="text" class="input-field" name="username" placeholder="Username" required>
+                <i class="bx bx-user"></i>
+            </div>
+            <div class="input-box">
+                <input type="password" class="input-field" name="password" placeholder="Password" required>
                 <i class="bx bx-lock-alt"></i>
             </div>
-
             <div class="input-box">
-                <input type="submit" class="submit" value="" name="login">
+                <input type="submit" class="submit" name="login" value="Sign In">
             </div>
+            </form>
+
+
+
 
             <div class="two-col">
                 <div class="one">
-                    <input type="checkbox" id="register-check">
-                    <label for="register-check"> Remember Me</label>
+                    <input type="checkbox" id="login-check">
+                    <label for="login-check">Remember Me</label>
                 </div>
                 <div class="two">
-                    <label><a href="#">Terms & conditions</a></label>
+                    <label><a href="#">Forgot password?</a></label>
                 </div>
             </div>
         </div>
-    </form>
-
+    </div>
 </div>
-
-</div>
-
-    <!------------------- registration form -------------------------->
 
 <script>
-
     function myMenuFunction() {
         var i = document.getElementById("navMenu");
-        if(i.className === "nav-menu") {
+        if (i.className === "nav-menu") {
             i.className += " responsive";
         } else {
             i.className = "nav-menu";
         }
-    }
-
-</script>
-<script>
-    var a = document.getElementById("loginBtn");
-    var b = document.getElementById("registerBtn");
-    var x = document.getElementById("login");
-    var y = document.getElementById("register");
-    function login() {
-        x.style.left = "4px";
-        y.style.right = "-520px";
-        a.className += " white-btn";
-        b.className = "btn";
-        x.style.opacity = 1;
-        y.style.opacity = 0;
-    }
-    function register() {
-        x.style.left = "-510px";
-        y.style.right = "5px";
-        a.className = "btn";
-        b.className += " white-btn";
-        x.style.opacity = 0;
-        y.style.opacity = 1;
     }
 </script>
 </body>
